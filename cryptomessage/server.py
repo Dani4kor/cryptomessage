@@ -10,7 +10,7 @@ import tornado.options
 import tornado.web
 import tornado.escape
 
-import crypt
+from algorithms import shuffle
 
 from tornado.options import define, options, parse_command_line
 
@@ -27,7 +27,7 @@ class MainHandler(tornado.web.RequestHandler):
             "id": str(uuid.uuid4()),
             "uncrypt-message": self.get_argument("uncrypt-message"),
         }
-        self.render("index.html", message=crypt.shuffle_string(message["uncrypt-message"]))
+        self.render("index.html", message=shuffle.shuffle_string(message["uncrypt-message"]))
 
 
 
