@@ -29,13 +29,16 @@ class MainHandler(tornado.web.RequestHandler):
         }
         self.render("index.html", message=shuffle.shuffle_string(message["uncrypt-message"]))
 
-
+class UpdateHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.html", message='Hello Update')
 
 def main():
     parse_command_line()
     app = tornado.web.Application(
         [
             (r"/", MainHandler),
+            (r"/update", UpdateHandler),
         ],
 
         cookie_secret="12345",
