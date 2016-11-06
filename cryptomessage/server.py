@@ -27,15 +27,17 @@ class MainHandler(tornado.web.RequestHandler):
         self.render("index.html", message='')
 
 
+
 class UpdateHandler(tornado.web.RequestHandler):
     def get(self):
-        example_response = {'key': None , 'value': None }
-        self.write(json.dumps(example_response))
+        response = {'key': None , 'value': None }
+        self.write(json.dumps(response))
 
     def post(self):
         json_obj = json_decode(self.request.body)
-        response_to_send = {'newkey': json_obj['message']}
-        self.write(json.dumps(response_to_send))
+
+        response = {'newkey': shuffle.shuffle_string(json_obj["message"])}
+        self.write(json.dumps(response))
 
 
 def main():
