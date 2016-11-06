@@ -1,11 +1,25 @@
-function loadDoc() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("demo").innerHTML =
-      this.responseText;
-    }
-  };
-  xhttp.open("GET", "ajax_info.txt", true);
-  xhttp.send();
-}
+$(document).ready(function () {
+    $('#runajax').click(function (event) {
+        var messageval = $("#inputmessage").val();
+        var data =
+        {
+            message: messageval
+        };
+        var dataToSend = JSON.stringify(data);
+        $.ajax(
+                {
+                    url: '/update/',
+                    type: 'POST',
+                    data: dataToSend,
+                    success: function (jsonResponse) {
+                        var objresponse = JSON.parse(jsonResponse);
+                        console.log(objresponse['newkey']);
+                        $("#message").text(objresponse['newkey']);
+                    },
+                    error: function () {
+                        $("#message").text("Error to load api");
+                    }
+                });
+        event.preventDefault();
+    });
+});

@@ -1,9 +1,10 @@
-#message {
-	width: 100px;
-	margin:0 auto;
-}
-
 #input {
 	padding-top: 100px;
 	text-align: center;
+}
+
+#message {
+    display:table;
+    margin:0 auto;
+
 }
