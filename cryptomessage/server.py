@@ -18,6 +18,7 @@ import json
 from datetime import date
 from tornado.escape import json_decode
 from tornado import gen
+from tornado.httpclient import AsyncHTTPClient
 from tornado.options import define, options, parse_command_line
 
 
@@ -37,12 +38,16 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 class MessageHandler(tornado.web.RequestHandler):
-    #@tornado.gen.coroutine
+    @gen.coroutine
     def get(self, message):
-        message1 = shuffle.shuffle_string(str(message))
-        response = {'message': message1,
+        message = shuffle.shuffle_string(str(message))
+        response = {'message': message,
                     'algorithm': 'shuffle'}
         self.write(json.dumps(response))
+
+
+
+
 
 
 
