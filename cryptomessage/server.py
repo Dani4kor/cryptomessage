@@ -14,6 +14,8 @@ from algorithms import shuffle
 
 
 import json
+
+from datetime import date
 from tornado.escape import json_decode
 from tornado import gen
 from tornado.options import define, options, parse_command_line
@@ -22,22 +24,26 @@ from tornado.options import define, options, parse_command_line
 define("port", default=8888, help="run on the given port", type=int)
 
 
+class VersionHandler(tornado.web.RequestHandler):
+    def get(self):
+        response = {'version': '0.0.1',
+                    'last_build': date.today().isoformat()}
+        self.write(json.dumps(response))
+
+
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html", message='')
 
 
-
-class UpdateHandler(tornado.web.RequestHandler):
-    def get(self):
-        response = {'key': None , 'value': None }
+class MessageHandler(tornado.web.RequestHandler):
+    #@tornado.gen.coroutine
+    def get(self, message):
+        message1 = shuffle.shuffle_string(str(message))
+        response = {'message': message1,
+                    'algorithm': 'shuffle'}
         self.write(json.dumps(response))
 
-    def post(self):
-        json_obj = json_decode(self.request.body)
-
-        response = {'newkey': shuffle.shuffle_string(json_obj["message"])}
-        self.write(json.dumps(response))
 
 
 def main():
@@ -45,7 +51,8 @@ def main():
     app = tornado.web.Application(
         [
             (r"/", MainHandler),
-            (r"/update/", UpdateHandler),
+            (r"/message/([0-9a-zA-Z_]+)", MessageHandler),
+            (r"/version/?", VersionHandler),
         ],
 
         template_path=os.path.join(os.path.dirname(__file__), "templates"),
@@ -57,3 +64,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
