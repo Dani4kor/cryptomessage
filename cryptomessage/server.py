@@ -8,6 +8,7 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+from tornado.ioloop import IOLoop
 
 
 from algorithms import shuffle
@@ -40,11 +41,17 @@ class MainHandler(tornado.web.RequestHandler):
 class MessageHandler(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self, message):
-        message = shuffle.shuffle_string(str(message))
+        message = yield f(message)
         response = {'message': message,
                     'algorithm': 'shuffle'}
+        io_loop = IOLoop.current()
+        yield gen.Task(io_loop.add_timeout, io_loop.time() + 1)
+
         self.write(json.dumps(response))
 
+@gen.coroutine
+def f(message):
+    return shuffle.shuffle_string(str(message))
 
 
 
