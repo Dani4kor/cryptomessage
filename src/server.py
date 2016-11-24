@@ -52,16 +52,15 @@ class ParseHandler(tornado.web.RequestHandler):
 def get_img(url):
     response = yield httpclient.AsyncHTTPClient().fetch(url)
     soup =  BeautifulSoup(response.body, 'html.parser')
-    t = [x.get('src') for x in soup.findAll('img')]
-    pprint.pprint(t[1], width=1)
-
-
+    t =  [x.get('src') for x in soup.findAll('img')]
+    raise gen.Return(t)
 
 class MainHandler(tornado.web.RequestHandler):
+    @gen.coroutine
     def get(self):
         url = 'http://spacetelescope.org/images/'
-        get_img(url)
-        self.render("index.html")
+        images = yield get_img(url)
+        self.render("index.html", image_message =images[1])
 
 
 
