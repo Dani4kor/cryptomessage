@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
-import os.path
 import os
-import time
 import uuid
 
 import tornado.httpserver
@@ -18,10 +16,13 @@ import json
 from datetime import date
 from tornado.escape import json_decode
 from tornado import gen
-from tornado.httpclient import AsyncHTTPClient
 from tornado.options import define, options, parse_command_line
 from concurrent.futures import ThreadPoolExecutor
-from urlparse import urljoin, urldefrag
+from bs4 import BeautifulSoup
+import time
+from datetime import timedelta
+import pprint
+
 
 
 
@@ -48,17 +49,18 @@ class ParseHandler(tornado.web.RequestHandler):
         self.write(json.dumps(response))
 
 @gen.coroutine
-def get_links_from_url(url):
-
+def get_img(url):
     response = yield httpclient.AsyncHTTPClient().fetch(url)
-    print('fetched %s' % url)
+    soup =  BeautifulSoup(response.body, 'html.parser')
+    t = [x.get('src') for x in soup.findAll('img')]
+    pprint.pprint(t[1], width=1)
 
 
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         url = 'http://spacetelescope.org/images/'
-        get_links_from_url(url)
+        get_img(url)
         self.render("index.html")
 
 
