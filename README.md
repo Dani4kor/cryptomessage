@@ -1,5 +1,5 @@
 # cryptomessage
 
-Implementing REST API on async tornado,
+Implementing async img scrobbler tornado,
 
 #in dev
