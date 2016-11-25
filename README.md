@@ -1,6 +1,6 @@
 # [Tornado](https://github.com/tornadoweb/tornado#tornado-web-server) image crawler
 
-Implementing async img scrobbler tornado
+Implementing asynchronous image crawler on Tornado Web Server
 
 ![example](/example.gif?raw=true "")
 
