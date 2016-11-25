@@ -5,18 +5,14 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
-from tornado import httpclient
 from tornado.ioloop import IOLoop
 from datetime import date
 
 import json
-from tornado.escape import json_decode
 from tornado import gen
 from tornado.options import define, options, parse_command_line
-from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup
 import time
-
 
 define("port", default=8889, help="run on the given port", type=int)
 
@@ -31,9 +27,6 @@ class VersionHandler(tornado.web.RequestHandler):
         response = {'version': '0.0.1',
                     'last_build': date.today().isoformat()}
         self.write(json.dumps(response))
-        # url = 'http://www.spacetelescope.org/images/'
-        # httpclient.AsyncHTTPClient(url)tor
-        # print urllib.urlopen("http://www.stackoverflow.com").getcode()
 
 
 class ParseHandler(tornado.web.RequestHandler):
@@ -48,18 +41,17 @@ class ParseHandler(tornado.web.RequestHandler):
             url = 'http://' + url
         images = yield get_img(url)
         self.render("index.html", image_message=images)
+
     get = post
 
 
 @gen.coroutine
 def get_img(url):
-
-
     http_client = tornado.httpclient.AsyncHTTPClient()
     try:
         response = yield http_client.fetch(url)
     except Exception as e:
-        x=['http://www.theshirtlist.com/wp-content/uploads/2016/04/Nope.png']
+        x = ['http://www.theshirtlist.com/wp-content/uploads/2016/04/Nope.png']
         raise gen.Return(x)
 
     soup = BeautifulSoup(response.body, 'html.parser')
@@ -67,14 +59,12 @@ def get_img(url):
     raise gen.Return(t)
 
 
-
-
 class MainHandler(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self):
         self.render("index.html", image_message='')
-    post = get
 
+    post = get
 
 
 def main():
