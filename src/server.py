@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 import time
 
 
-define("port", default=8888, help="run on the given port", type=int)
+define("port", default=8889, help="run on the given port", type=int)
 
 
 @gen.coroutine
@@ -40,7 +40,6 @@ class ParseHandler(tornado.web.RequestHandler):
     @gen.coroutine
     def post(self):
         url = self.get_body_argument('message')
-
         if url.startswith('http://www.'):
             url = 'http://' + url[len('http://www.'):]
         elif url.startswith('www.'):
@@ -48,10 +47,7 @@ class ParseHandler(tornado.web.RequestHandler):
         elif not url.startswith('http://'):
             url = 'http://' + url
         images = yield get_img(url)
-        print images
-
         self.render("index.html", image_message=images)
-
     get = post
 
 
