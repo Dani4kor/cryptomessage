@@ -1,6 +1,7 @@
 #input {
 	padding-top: 100px;
 	text-align: center;
+    padding-bottom: 100px;
 }
 
 #message {
@@ -8,10 +9,14 @@
     padding:5px 10px;
     margin:0 auto;
 }
+
 #body{
-    background-color: #3366CC;
+    background-color: #D3D3D3;
 }
 
 
-
-
+#hr{
+    height:3px;
+    color: black;
+    background-color: black;
+  }
