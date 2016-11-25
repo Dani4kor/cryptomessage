@@ -23,16 +23,13 @@ import time
 from datetime import timedelta
 import pprint
 
-
-
-
 define("port", default=8888, help="run on the given port", type=int)
-
 
 
 @gen.coroutine
 def waits():
     yield gen.Task(IOLoop.instance().add_timeout, time.time() + 1)
+
 
 class VersionHandler(tornado.web.RequestHandler):
     def get(self):
@@ -40,32 +37,41 @@ class VersionHandler(tornado.web.RequestHandler):
                     'last_build': date.today().isoformat()}
         self.write(json.dumps(response))
 
+
 class ParseHandler(tornado.web.RequestHandler):
     executor = ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
 
+    @gen.coroutine
     def post(self):
-        json_obj = json_decode(self.request.body)
-        response = {'img': json_obj["message"]}
-        self.write(json.dumps(response))
+        url = self.get_body_argument('message')
+
+        if url.startswith('http://www.'):
+            url = 'http://' + url[len('http://www.'):]
+        elif url.startswith('www.'):
+            url = 'http://' + url[len('www.'):]
+        elif not url.startswith('http://'):
+            url = 'http://' + url
+
+        print url
+
+        images = yield get_img(url)
+        self.render("index.html", image_message=images)
+
+    get = post
+
 
 @gen.coroutine
 def get_img(url):
     response = yield httpclient.AsyncHTTPClient().fetch(url)
-    soup =  BeautifulSoup(response.body, 'html.parser')
-    t =  [x.get('src') for x in soup.findAll('img')]
+    soup = BeautifulSoup(response.body, 'html.parser')
+    t = [x.get('src') for x in soup.findAll('img')]
     raise gen.Return(t)
+
 
 class MainHandler(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self):
-        url = 'http://spacetelescope.org/images/'
-        images = yield get_img(url)
-        self.render("index.html", image_message =images[1])
-
-
-
-
-
+        self.render("index.html", image_message='')
 
 
 def main():
