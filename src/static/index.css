@@ -8,19 +8,9 @@
     padding:5px 10px;
     margin:0 auto;
 }
-#body-main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+#body{
+    background-color: #3366CC;
 }
-
-#body-main p {
-    width: 400px;
-    padding: 15px;
-    background-color: #f1f1f1;
-}
-
 
 
 
