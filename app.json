@@ -1,0 +1,15 @@
+{
+  "name": "tornado-image-crawler",
+  "description": "Heroku tornado deploy",
+ 
+  "website": "https://github.com/dani4kor",
+  "repository": "https://github.com/dani4kor/tornado-img",
+  "logo": "http://www.tornadoweb.org/en/stable/_images/tornado.png",
+  "success_url": "/",
+  "image": "heroku/python",
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-python"
+    }
+  ]
+}
