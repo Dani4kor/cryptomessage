@@ -1,7 +1,7 @@
 #input {
 	padding-top: 100px;
 	text-align: center;
-    padding-bo: 100px;
+    padding-bottom: 100px;
 }
 
 #message {
@@ -20,3 +20,4 @@
     color: black;
     background-color: black;
   }
+
