@@ -8,7 +8,7 @@ Cooked Heroku deploy
 
 ![example](/example.gif?raw=true "")
 
-## USAGE
+## Usage
 Deploy this guy, then git clone locally:
 
 ```
