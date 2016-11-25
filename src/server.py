@@ -31,12 +31,16 @@ class VersionHandler(tornado.web.RequestHandler):
         response = {'version': '0.0.1',
                     'last_build': date.today().isoformat()}
         self.write(json.dumps(response))
+        # url = 'http://www.spacetelescope.org/images/'
+        # httpclient.AsyncHTTPClient(url)tor
+        # print urllib.urlopen("http://www.stackoverflow.com").getcode()
 
 
 class ParseHandler(tornado.web.RequestHandler):
     @gen.coroutine
     def post(self):
         url = self.get_body_argument('message')
+
         if url.startswith('http://www.'):
             url = 'http://' + url[len('http://www.'):]
         elif url.startswith('www.'):
@@ -44,6 +48,8 @@ class ParseHandler(tornado.web.RequestHandler):
         elif not url.startswith('http://'):
             url = 'http://' + url
         images = yield get_img(url)
+        print images
+
         self.render("index.html", image_message=images)
 
     get = post
@@ -51,16 +57,28 @@ class ParseHandler(tornado.web.RequestHandler):
 
 @gen.coroutine
 def get_img(url):
-    response = yield httpclient.AsyncHTTPClient().fetch(url)
+
+
+    http_client = tornado.httpclient.AsyncHTTPClient()
+    try:
+        response = yield http_client.fetch(url)
+    except Exception as e:
+        x=['http://www.theshirtlist.com/wp-content/uploads/2016/04/Nope.png']
+        raise gen.Return(x)
+
     soup = BeautifulSoup(response.body, 'html.parser')
     t = [x.get('src') for x in soup.findAll('img')]
     raise gen.Return(t)
+
+
 
 
 class MainHandler(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self):
         self.render("index.html", image_message='')
+    post = get
+
 
 
 def main():

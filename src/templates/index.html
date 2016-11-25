@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ static_url("index.css")}}" type="text/css">
 </head>
 
-<body>
+<body id="body">
     <div>
         <form method="POST" action="/parse" id="input">
             <input type="text" name="message">
@@ -15,7 +15,7 @@
     </div>
     {% for i in xrange(len(image_message)) %}
     <img id="{{i}}" src="{{image_message[i]}}" alt="img" width="120" height="120"> {% end %}
-    <hr>
+    <hr id="hr">
     {% for i in xrange(len(image_message)) %}
     <img id="{{i}}" src="{{image_message[i]}}" alt="img"> {% end %}
 
